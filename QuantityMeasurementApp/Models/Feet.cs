@@ -29,6 +29,7 @@ namespace QuantityMeasurementApp.Models
             return _value == other._value;
         }
 
+
         public override int GetHashCode()
         {
             return _value.GetHashCode();
