@@ -14,9 +14,10 @@ namespace QuantityMeasurementApp
             while (running)
             {
                 Console.WriteLine("\n===== Quantity Measurement Menu =====");
-                Console.WriteLine("1. Compare Feet");
-                Console.WriteLine("2. Compare Inches");
-                Console.WriteLine("3. Exit");
+                Console.WriteLine("1. UC1 - Compare Feet");
+                Console.WriteLine("2. UC2 - Compare Inches");
+                Console.WriteLine("3. UC3 - Compare Generic Quantity");
+                Console.WriteLine("4. Exit");
                 Console.Write("Select an option: ");
 
                 string choice = Console.ReadLine();
@@ -32,73 +33,76 @@ namespace QuantityMeasurementApp
                         break;
 
                     case "3":
+                        CompareGeneric(service);
+                        break;
+
+                    case "4":
                         running = false;
                         Console.WriteLine("Exiting application...");
                         break;
 
                     default:
-                        Console.WriteLine("Invalid choice. Try again.");
+                        Console.WriteLine("Invalid choice.");
                         break;
                 }
             }
         }
 
-        // -------------------------
-        // Feet Comparison
-        // -------------------------
+        // ---------------- UC1 ----------------
         static void CompareFeet(QuantityMeasurementService service)
         {
             Console.Write("Enter first value in feet: ");
-            if (!double.TryParse(Console.ReadLine(), out double value1))
-            {
-                Console.WriteLine("Invalid input");
-                return;
-            }
+            double v1 = double.Parse(Console.ReadLine());
 
             Console.Write("Enter second value in feet: ");
-            if (!double.TryParse(Console.ReadLine(), out double value2))
-            {
-                Console.WriteLine("Invalid input");
-                return;
-            }
+            double v2 = double.Parse(Console.ReadLine());
 
-            Feet feet1 = new Feet(value1);
-            Feet feet2 = new Feet(value2);
+            Feet f1 = new Feet(v1);
+            Feet f2 = new Feet(v2);
 
-            bool result = service.AreEqual(feet1, feet2);
-
-            Console.WriteLine(result
+            Console.WriteLine(service.AreEqual(f1, f2)
                 ? "Feet Equal (true)"
                 : "Feet Not Equal (false)");
         }
 
-        // -------------------------
-        // Inches Comparison
-        // -------------------------
+        // ---------------- UC2 ----------------
         static void CompareInches(QuantityMeasurementService service)
         {
             Console.Write("Enter first value in inches: ");
-            if (!double.TryParse(Console.ReadLine(), out double value1))
-            {
-                Console.WriteLine("Invalid input");
-                return;
-            }
+            double v1 = double.Parse(Console.ReadLine());
 
             Console.Write("Enter second value in inches: ");
-            if (!double.TryParse(Console.ReadLine(), out double value2))
-            {
-                Console.WriteLine("Invalid input");
-                return;
-            }
+            double v2 = double.Parse(Console.ReadLine());
 
-            Inches inch1 = new Inches(value1);
-            Inches inch2 = new Inches(value2);
+            Inches i1 = new Inches(v1);
+            Inches i2 = new Inches(v2);
 
-            bool result = service.AreEqual(inch1, inch2);
-
-            Console.WriteLine(result
+            Console.WriteLine(service.AreEqual(i1, i2)
                 ? "Inches Equal (true)"
                 : "Inches Not Equal (false)");
+        }
+
+        // ---------------- UC3 ----------------
+        static void CompareGeneric(QuantityMeasurementService service)
+        {
+            Console.Write("Enter first value: ");
+            double value1 = double.Parse(Console.ReadLine());
+
+            Console.Write("Enter first unit (FEET/INCH): ");
+            LengthUnit unit1 = Enum.Parse<LengthUnit>(Console.ReadLine().ToUpper());
+
+            Console.Write("Enter second value: ");
+            double value2 = double.Parse(Console.ReadLine());
+
+            Console.Write("Enter second unit (FEET/INCH): ");
+            LengthUnit unit2 = Enum.Parse<LengthUnit>(Console.ReadLine().ToUpper());
+
+            QuantityLength q1 = new QuantityLength(value1, unit1);
+            QuantityLength q2 = new QuantityLength(value2, unit2);
+
+            Console.WriteLine(service.AreEqual(q1, q2)
+                ? "Equal (true)"
+                : "Not Equal (false)");
         }
     }
 }

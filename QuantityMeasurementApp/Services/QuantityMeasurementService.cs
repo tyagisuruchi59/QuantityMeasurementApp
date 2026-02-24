@@ -19,6 +19,13 @@ namespace QuantityMeasurementApp.Services
 
     return i1.Equals(i2);
 }
+   public bool AreEqual(QuantityLength q1, QuantityLength q2)
+{
+    if (q1 == null || q2 == null)
+        return false;
+
+    return q1.Equals(q2);
+} 
       
     }
 }
