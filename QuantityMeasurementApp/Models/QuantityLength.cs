@@ -57,5 +57,62 @@ namespace QuantityMeasurementApp.Models
         {
             return ConvertToFeet().GetHashCode();
         }
+
+        // ---------------- UC5 CONVERSION METHODS ----------------
+
+public static double Convert(double value, LengthUnit source, LengthUnit target)
+{
+    if (double.IsNaN(value) || double.IsInfinity(value))
+        throw new ArgumentException("Invalid numeric value");
+
+    double valueInFeet = ConvertToFeetStatic(value, source);
+
+    return ConvertFromFeet(valueInFeet, target);
+}
+
+private static double ConvertToFeetStatic(double value, LengthUnit unit)
+{
+    switch (unit)
+    {
+        case LengthUnit.FEET:
+            return value;
+
+        case LengthUnit.INCH:
+            return value / 12.0;
+
+        case LengthUnit.YARD:
+            return value * 3.0;
+
+        case LengthUnit.CENTIMETER:
+            return (value * 0.393701) / 12.0;
+
+        default:
+            throw new ArgumentException("Unsupported unit");
     }
 }
+
+private static double ConvertFromFeet(double valueInFeet, LengthUnit unit)
+{
+    switch (unit)
+    {
+        case LengthUnit.FEET:
+            return valueInFeet;
+
+        case LengthUnit.INCH:
+            return valueInFeet * 12.0;
+
+        case LengthUnit.YARD:
+            return valueInFeet / 3.0;
+
+        case LengthUnit.CENTIMETER:
+            return (valueInFeet * 12.0) / 0.393701;
+
+        default:
+            throw new ArgumentException("Unsupported unit");
+    }
+}
+    }
+
+    
+}
+
