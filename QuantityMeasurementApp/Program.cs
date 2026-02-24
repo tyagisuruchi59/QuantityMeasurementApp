@@ -18,7 +18,8 @@ namespace QuantityMeasurementApp
                 Console.WriteLine("2. UC2 - Compare Inches");
                 Console.WriteLine("3. UC3/UC4 - Compare Generic Quantity");
                 Console.WriteLine("4. UC5 - Convert Units");
-                Console.WriteLine("5. Exit");
+                Console.WriteLine("5. UC6 - Add Two Lengths");   // ✅ Added
+                Console.WriteLine("6. Exit");                    // ✅ Updated
                 Console.Write("Select an option: ");
 
                 string? choice = Console.ReadLine();
@@ -42,6 +43,10 @@ namespace QuantityMeasurementApp
                         break;
 
                     case "5":
+                        AddLengths();   // ✅ Added
+                        break;
+
+                    case "6":
                         running = false;
                         Console.WriteLine("Exiting application...");
                         break;
@@ -129,6 +134,31 @@ namespace QuantityMeasurementApp
             double result = QuantityLength.Convert(value, from, to);
 
             Console.WriteLine($"Converted Value: {result}");
+        }
+
+        // ---------------- UC6 ----------------
+        static void AddLengths()
+        {
+            Console.WriteLine("\nSupported Units: FEET, INCH, YARD, CENTIMETER");
+
+            Console.Write("Enter first value: ");
+            double value1 = double.Parse(Console.ReadLine()!);
+
+            Console.Write("Enter first unit: ");
+            LengthUnit unit1 = Enum.Parse<LengthUnit>(Console.ReadLine()!.ToUpper());
+
+            Console.Write("Enter second value: ");
+            double value2 = double.Parse(Console.ReadLine()!);
+
+            Console.Write("Enter second unit: ");
+            LengthUnit unit2 = Enum.Parse<LengthUnit>(Console.ReadLine()!.ToUpper());
+
+            QuantityLength q1 = new QuantityLength(value1, unit1);
+            QuantityLength q2 = new QuantityLength(value2, unit2);
+
+            QuantityLength result = q1.Add(q2);
+
+            Console.WriteLine($"Result: {result.Value} {result.Unit}");
         }
     }
 }

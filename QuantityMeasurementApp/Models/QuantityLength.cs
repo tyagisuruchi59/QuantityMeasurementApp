@@ -15,6 +15,8 @@ namespace QuantityMeasurementApp.Models
             this.unit = unit;
             this.value = value;
         }
+        public double Value => value;
+public LengthUnit Unit => unit;
 
         private double ConvertToFeet()
 {
@@ -110,6 +112,28 @@ private static double ConvertFromFeet(double valueInFeet, LengthUnit unit)
         default:
             throw new ArgumentException("Unsupported unit");
     }
+}
+
+public QuantityLength Add(QuantityLength other)
+{
+    if (other == null)
+        throw new ArgumentException("Second operand cannot be null.");
+
+    if (double.IsNaN(this.value) || double.IsInfinity(this.value) ||
+        double.IsNaN(other.value) || double.IsInfinity(other.value))
+        throw new ArgumentException("Invalid numeric value.");
+
+    // Convert both to base unit (FEET assumed base)
+    double baseValue1 = Convert(this.value, this.unit, LengthUnit.FEET);
+    double baseValue2 = Convert(other.value, other.unit, LengthUnit.FEET);
+
+    // Add in base unit
+    double sumBase = baseValue1 + baseValue2;
+
+    // Convert back to unit of first operand
+    double finalValue = Convert(sumBase, LengthUnit.FEET, this.unit);
+
+    return new QuantityLength(finalValue, this.unit);
 }
     }
 
