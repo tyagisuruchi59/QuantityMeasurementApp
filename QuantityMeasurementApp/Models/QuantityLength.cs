@@ -17,19 +17,27 @@ namespace QuantityMeasurementApp.Models
         }
 
         private double ConvertToFeet()
-        {
-            switch (unit)
-            {
-                case LengthUnit.FEET:
-                    return value;
+{
+    switch (unit)
+    {
+        case LengthUnit.FEET:
+            return value;
 
-                case LengthUnit.INCH:
-                    return value / 12.0;
+        case LengthUnit.INCH:
+            return value / 12.0;
 
-                default:
-                    throw new ArgumentException("Unsupported unit");
-            }
-        }
+        case LengthUnit.YARD:
+            return value * 3.0;   // 1 yard = 3 feet
+
+        case LengthUnit.CENTIMETER:
+            return (value * 0.393701) / 12.0;
+            // 1 cm = 0.393701 inches
+            // inches to feet → divide by 12
+
+        default:
+            throw new ArgumentException("Unsupported unit");
+    }
+}
 
         public override bool Equals(object obj)
         {
@@ -42,7 +50,7 @@ namespace QuantityMeasurementApp.Models
             if (!(obj is QuantityLength other))
                 return false;
 
-            return this.ConvertToFeet() == other.ConvertToFeet();
+            return Math.Abs(this.ConvertToFeet() - other.ConvertToFeet()) < 0.00001;
         }
 
         public override int GetHashCode()

@@ -16,7 +16,7 @@ namespace QuantityMeasurementApp
                 Console.WriteLine("\n===== Quantity Measurement Menu =====");
                 Console.WriteLine("1. UC1 - Compare Feet");
                 Console.WriteLine("2. UC2 - Compare Inches");
-                Console.WriteLine("3. UC3 - Compare Generic Quantity");
+                Console.WriteLine("3. UC3/UC4 - Compare Generic Quantity");
                 Console.WriteLine("4. Exit");
                 Console.Write("Select an option: ");
 
@@ -48,7 +48,7 @@ namespace QuantityMeasurementApp
             }
         }
 
-        // ---------------- UC1 ----------------
+        // ---------- UC1 ----------
         static void CompareFeet(QuantityMeasurementService service)
         {
             Console.Write("Enter first value in feet: ");
@@ -65,7 +65,7 @@ namespace QuantityMeasurementApp
                 : "Feet Not Equal (false)");
         }
 
-        // ---------------- UC2 ----------------
+        // ---------- UC2 ----------
         static void CompareInches(QuantityMeasurementService service)
         {
             Console.Write("Enter first value in inches: ");
@@ -82,19 +82,21 @@ namespace QuantityMeasurementApp
                 : "Inches Not Equal (false)");
         }
 
-        // ---------------- UC3 ----------------
+        // ---------- UC3 + UC4 ----------
         static void CompareGeneric(QuantityMeasurementService service)
         {
+            Console.WriteLine("\nSupported Units: FEET, INCH, YARD, CENTIMETER");
+
             Console.Write("Enter first value: ");
             double value1 = double.Parse(Console.ReadLine());
 
-            Console.Write("Enter first unit (FEET/INCH): ");
+            Console.Write("Enter first unit: ");
             LengthUnit unit1 = Enum.Parse<LengthUnit>(Console.ReadLine().ToUpper());
 
             Console.Write("Enter second value: ");
             double value2 = double.Parse(Console.ReadLine());
 
-            Console.Write("Enter second unit (FEET/INCH): ");
+            Console.Write("Enter second unit: ");
             LengthUnit unit2 = Enum.Parse<LengthUnit>(Console.ReadLine().ToUpper());
 
             QuantityLength q1 = new QuantityLength(value1, unit1);
