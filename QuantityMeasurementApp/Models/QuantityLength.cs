@@ -135,6 +135,52 @@ public QuantityLength Add(QuantityLength other)
 
     return new QuantityLength(finalValue, this.unit);
 }
+
+// UC7 - Addition with Explicit Target Unit
+public QuantityLength Add(QuantityLength other, LengthUnit targetUnit)
+{
+    if (other == null)
+        throw new ArgumentException("Other quantity cannot be null");
+
+    if (!Enum.IsDefined(typeof(LengthUnit), targetUnit))
+        throw new ArgumentException("Invalid target unit");
+
+    if (double.IsNaN(other.Value) || double.IsInfinity(other.Value))
+        throw new ArgumentException("Invalid numeric value");
+
+    // Convert both values to base unit (FEET)
+    double thisInFeet = ConvertToFeet();
+    double otherInFeet = other.ConvertToFeet();
+
+    double sumInFeet = thisInFeet + otherInFeet;
+
+    // Convert sum to target unit
+    double resultValue;
+
+    switch (targetUnit)
+    {
+        case LengthUnit.FEET:
+            resultValue = sumInFeet;
+            break;
+
+        case LengthUnit.INCH:
+            resultValue = sumInFeet * 12.0;
+            break;
+
+        case LengthUnit.YARD:
+            resultValue = sumInFeet / 3.0;
+            break;
+
+        case LengthUnit.CENTIMETER:
+            resultValue = sumInFeet * 30.48;
+            break;
+
+        default:
+            throw new ArgumentException("Unsupported target unit");
+    }
+
+    return new QuantityLength(resultValue, targetUnit);
+}
     }
 
     

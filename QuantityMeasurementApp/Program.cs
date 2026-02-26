@@ -18,8 +18,9 @@ namespace QuantityMeasurementApp
                 Console.WriteLine("2. UC2 - Compare Inches");
                 Console.WriteLine("3. UC3/UC4 - Compare Generic Quantity");
                 Console.WriteLine("4. UC5 - Convert Units");
-                Console.WriteLine("5. UC6 - Add Two Lengths");   // ✅ Added
-                Console.WriteLine("6. Exit");                    // ✅ Updated
+                Console.WriteLine("5. UC6 - Add Two Lengths");
+                Console.WriteLine("6. UC7 - Add With Target Unit"); // ✅ Added
+                Console.WriteLine("7. Exit");                       // ✅ Updated
                 Console.Write("Select an option: ");
 
                 string? choice = Console.ReadLine();
@@ -43,10 +44,14 @@ namespace QuantityMeasurementApp
                         break;
 
                     case "5":
-                        AddLengths();   // ✅ Added
+                        AddLengths();
                         break;
 
                     case "6":
+                        AddLengthsWithTarget();   // ✅ UC7
+                        break;
+
+                    case "7":
                         running = false;
                         Console.WriteLine("Exiting application...");
                         break;
@@ -157,6 +162,34 @@ namespace QuantityMeasurementApp
             QuantityLength q2 = new QuantityLength(value2, unit2);
 
             QuantityLength result = q1.Add(q2);
+
+            Console.WriteLine($"Result: {result.Value} {result.Unit}");
+        }
+
+        // ---------------- UC7 ----------------
+        static void AddLengthsWithTarget()
+        {
+            Console.WriteLine("\nSupported Units: FEET, INCH, YARD, CENTIMETER");
+
+            Console.Write("Enter first value: ");
+            double value1 = double.Parse(Console.ReadLine()!);
+
+            Console.Write("Enter first unit: ");
+            LengthUnit unit1 = Enum.Parse<LengthUnit>(Console.ReadLine()!.ToUpper());
+
+            Console.Write("Enter second value: ");
+            double value2 = double.Parse(Console.ReadLine()!);
+
+            Console.Write("Enter second unit: ");
+            LengthUnit unit2 = Enum.Parse<LengthUnit>(Console.ReadLine()!.ToUpper());
+
+            Console.Write("Enter TARGET unit: ");
+            LengthUnit targetUnit = Enum.Parse<LengthUnit>(Console.ReadLine()!.ToUpper());
+
+            QuantityLength q1 = new QuantityLength(value1, unit1);
+            QuantityLength q2 = new QuantityLength(value2, unit2);
+
+            QuantityLength result = q1.Add(q2, targetUnit);
 
             Console.WriteLine($"Result: {result.Value} {result.Unit}");
         }
