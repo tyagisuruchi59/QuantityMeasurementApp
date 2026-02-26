@@ -7,6 +7,8 @@ namespace QuantityMeasurementApp.Models
         private readonly double value;
         private readonly LengthUnit unit;
 
+        private const double EPSILON = 0.00001;
+
         public QuantityLength(double value, LengthUnit unit)
         {
             if (double.IsNaN(value) || double.IsInfinity(value))
@@ -15,31 +17,28 @@ namespace QuantityMeasurementApp.Models
             this.unit = unit;
             this.value = value;
         }
+
         public double Value => value;
-public LengthUnit Unit => unit;
+        public LengthUnit Unit => unit;
+
+        // ---------------- Internal Base Conversion ----------------
 
         private double ConvertToFeet()
-{
-    switch (unit)
-    {
-        case LengthUnit.FEET:
-            return value;
+        {
+            return unit.ConvertToFeet(value);
+        }
 
-        case LengthUnit.INCH:
-            return value / 12.0;
+        private static double ConvertToFeetStatic(double value, LengthUnit unit)
+        {
+            return unit.ConvertToFeet(value);
+        }
 
-        case LengthUnit.YARD:
-            return value * 3.0;   // 1 yard = 3 feet
+        private static double ConvertFromFeet(double valueInFeet, LengthUnit unit)
+        {
+            return unit.ConvertFromFeet(valueInFeet);
+        }
 
-        case LengthUnit.CENTIMETER:
-            return (value * 0.393701) / 12.0;
-            // 1 cm = 0.393701 inches
-            // inches to feet → divide by 12
-
-        default:
-            throw new ArgumentException("Unsupported unit");
-    }
-}
+        // ---------------- Equality (UC1, UC2, UC3, UC4) ----------------
 
         public override bool Equals(object obj)
         {
@@ -52,7 +51,10 @@ public LengthUnit Unit => unit;
             if (!(obj is QuantityLength other))
                 return false;
 
-            return Math.Abs(this.ConvertToFeet() - other.ConvertToFeet()) < 0.00001;
+            double thisInFeet = this.ConvertToFeet();
+            double otherInFeet = other.ConvertToFeet();
+
+            return Math.Abs(thisInFeet - otherInFeet) < EPSILON;
         }
 
         public override int GetHashCode()
@@ -60,129 +62,61 @@ public LengthUnit Unit => unit;
             return ConvertToFeet().GetHashCode();
         }
 
-        // ---------------- UC5 CONVERSION METHODS ----------------
+        // ---------------- UC5: Conversion ----------------
 
-public static double Convert(double value, LengthUnit source, LengthUnit target)
-{
-    if (double.IsNaN(value) || double.IsInfinity(value))
-        throw new ArgumentException("Invalid numeric value");
+        public static double Convert(double value, LengthUnit source, LengthUnit target)
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value))
+                throw new ArgumentException("Invalid numeric value");
 
-    double valueInFeet = ConvertToFeetStatic(value, source);
+            double valueInFeet = ConvertToFeetStatic(value, source);
 
-    return ConvertFromFeet(valueInFeet, target);
-}
+            return ConvertFromFeet(valueInFeet, target);
+        }
 
-private static double ConvertToFeetStatic(double value, LengthUnit unit)
-{
-    switch (unit)
-    {
-        case LengthUnit.FEET:
-            return value;
+        public QuantityLength ConvertTo(LengthUnit targetUnit)
+        {
+            double baseValue = ConvertToFeet();
+            double result = ConvertFromFeet(baseValue, targetUnit);
 
-        case LengthUnit.INCH:
-            return value / 12.0;
+            return new QuantityLength(result, targetUnit);
+        }
 
-        case LengthUnit.YARD:
-            return value * 3.0;
+        // ---------------- UC6: Add (Default Unit) ----------------
 
-        case LengthUnit.CENTIMETER:
-            return (value * 0.393701) / 12.0;
+        public QuantityLength Add(QuantityLength other)
+        {
+            if (other == null)
+                throw new ArgumentException("Second operand cannot be null.");
 
-        default:
-            throw new ArgumentException("Unsupported unit");
+            double baseValue1 = ConvertToFeet();
+            double baseValue2 = other.ConvertToFeet();
+
+            double sumBase = baseValue1 + baseValue2;
+
+            double finalValue = ConvertFromFeet(sumBase, this.unit);
+
+            return new QuantityLength(finalValue, this.unit);
+        }
+
+        // ---------------- UC7: Add With Target Unit ----------------
+
+        public QuantityLength Add(QuantityLength other, LengthUnit targetUnit)
+        {
+            if (other == null)
+                throw new ArgumentException("Other quantity cannot be null");
+
+            if (!Enum.IsDefined(typeof(LengthUnit), targetUnit))
+                throw new ArgumentException("Invalid target unit");
+
+            double baseValue1 = ConvertToFeet();
+            double baseValue2 = other.ConvertToFeet();
+
+            double sumBase = baseValue1 + baseValue2;
+
+            double resultValue = ConvertFromFeet(sumBase, targetUnit);
+
+            return new QuantityLength(resultValue, targetUnit);
+        }
     }
 }
-
-private static double ConvertFromFeet(double valueInFeet, LengthUnit unit)
-{
-    switch (unit)
-    {
-        case LengthUnit.FEET:
-            return valueInFeet;
-
-        case LengthUnit.INCH:
-            return valueInFeet * 12.0;
-
-        case LengthUnit.YARD:
-            return valueInFeet / 3.0;
-
-        case LengthUnit.CENTIMETER:
-            return (valueInFeet * 12.0) / 0.393701;
-
-        default:
-            throw new ArgumentException("Unsupported unit");
-    }
-}
-
-public QuantityLength Add(QuantityLength other)
-{
-    if (other == null)
-        throw new ArgumentException("Second operand cannot be null.");
-
-    if (double.IsNaN(this.value) || double.IsInfinity(this.value) ||
-        double.IsNaN(other.value) || double.IsInfinity(other.value))
-        throw new ArgumentException("Invalid numeric value.");
-
-    // Convert both to base unit (FEET assumed base)
-    double baseValue1 = Convert(this.value, this.unit, LengthUnit.FEET);
-    double baseValue2 = Convert(other.value, other.unit, LengthUnit.FEET);
-
-    // Add in base unit
-    double sumBase = baseValue1 + baseValue2;
-
-    // Convert back to unit of first operand
-    double finalValue = Convert(sumBase, LengthUnit.FEET, this.unit);
-
-    return new QuantityLength(finalValue, this.unit);
-}
-
-// UC7 - Addition with Explicit Target Unit
-public QuantityLength Add(QuantityLength other, LengthUnit targetUnit)
-{
-    if (other == null)
-        throw new ArgumentException("Other quantity cannot be null");
-
-    if (!Enum.IsDefined(typeof(LengthUnit), targetUnit))
-        throw new ArgumentException("Invalid target unit");
-
-    if (double.IsNaN(other.Value) || double.IsInfinity(other.Value))
-        throw new ArgumentException("Invalid numeric value");
-
-    // Convert both values to base unit (FEET)
-    double thisInFeet = ConvertToFeet();
-    double otherInFeet = other.ConvertToFeet();
-
-    double sumInFeet = thisInFeet + otherInFeet;
-
-    // Convert sum to target unit
-    double resultValue;
-
-    switch (targetUnit)
-    {
-        case LengthUnit.FEET:
-            resultValue = sumInFeet;
-            break;
-
-        case LengthUnit.INCH:
-            resultValue = sumInFeet * 12.0;
-            break;
-
-        case LengthUnit.YARD:
-            resultValue = sumInFeet / 3.0;
-            break;
-
-        case LengthUnit.CENTIMETER:
-            resultValue = sumInFeet * 30.48;
-            break;
-
-        default:
-            throw new ArgumentException("Unsupported target unit");
-    }
-
-    return new QuantityLength(resultValue, targetUnit);
-}
-    }
-
-    
-}
-

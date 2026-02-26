@@ -17,10 +17,11 @@ namespace QuantityMeasurementApp
                 Console.WriteLine("1. UC1 - Compare Feet");
                 Console.WriteLine("2. UC2 - Compare Inches");
                 Console.WriteLine("3. UC3/UC4 - Compare Generic Quantity");
-                Console.WriteLine("4. UC5 - Convert Units");
+                Console.WriteLine("4. UC5 - Convert Units (Static)");
                 Console.WriteLine("5. UC6 - Add Two Lengths");
-                Console.WriteLine("6. UC7 - Add With Target Unit"); // ✅ Added
-                Console.WriteLine("7. Exit");                       // ✅ Updated
+                Console.WriteLine("6. UC7 - Add With Target Unit");
+                Console.WriteLine("7. UC8 - Convert Using Refactored Unit");
+                Console.WriteLine("8. Exit");
                 Console.Write("Select an option: ");
 
                 string? choice = Console.ReadLine();
@@ -48,10 +49,14 @@ namespace QuantityMeasurementApp
                         break;
 
                     case "6":
-                        AddLengthsWithTarget();   // ✅ UC7
+                        AddLengthsWithTarget();
                         break;
 
                     case "7":
+                        ConvertUsingUC8();
+                        break;
+
+                    case "8":
                         running = false;
                         Console.WriteLine("Exiting application...");
                         break;
@@ -192,6 +197,27 @@ namespace QuantityMeasurementApp
             QuantityLength result = q1.Add(q2, targetUnit);
 
             Console.WriteLine($"Result: {result.Value} {result.Unit}");
+        }
+
+        // ---------------- UC8 ----------------
+        static void ConvertUsingUC8()
+        {
+            Console.WriteLine("\nSupported Units: FEET, INCH, YARD, CENTIMETER");
+
+            Console.Write("Enter value: ");
+            double value = double.Parse(Console.ReadLine()!);
+
+            Console.Write("Enter current unit: ");
+            LengthUnit currentUnit = Enum.Parse<LengthUnit>(Console.ReadLine()!.ToUpper());
+
+            Console.Write("Enter target unit: ");
+            LengthUnit targetUnit = Enum.Parse<LengthUnit>(Console.ReadLine()!.ToUpper());
+
+            QuantityLength quantity = new QuantityLength(value, currentUnit);
+
+            QuantityLength result = quantity.ConvertTo(targetUnit);
+
+            Console.WriteLine($"Converted Result: {result.Value} {result.Unit}");
         }
     }
 }
