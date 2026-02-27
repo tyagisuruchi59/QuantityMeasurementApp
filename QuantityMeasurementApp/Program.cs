@@ -21,46 +21,26 @@ namespace QuantityMeasurementApp
                 Console.WriteLine("5. UC6 - Add Two Lengths");
                 Console.WriteLine("6. UC7 - Add With Target Unit");
                 Console.WriteLine("7. UC8 - Convert Using Refactored Unit");
-                Console.WriteLine("8. Exit");
+                Console.WriteLine("9. UC9 - Weight Operations");
+                Console.WriteLine("10. Exit");
                 Console.Write("Select an option: ");
 
                 string? choice = Console.ReadLine();
 
                 switch (choice)
                 {
-                    case "1":
-                        CompareFeet(service);
-                        break;
-
-                    case "2":
-                        CompareInches(service);
-                        break;
-
-                    case "3":
-                        CompareGeneric(service);
-                        break;
-
-                    case "4":
-                        ConvertUnits();
-                        break;
-
-                    case "5":
-                        AddLengths();
-                        break;
-
-                    case "6":
-                        AddLengthsWithTarget();
-                        break;
-
-                    case "7":
-                        ConvertUsingUC8();
-                        break;
-
-                    case "8":
+                    case "1": CompareFeet(service); break;
+                    case "2": CompareInches(service); break;
+                    case "3": CompareGeneric(service); break;
+                    case "4": ConvertUnits(); break;
+                    case "5": AddLengths(); break;
+                    case "6": AddLengthsWithTarget(); break;
+                    case "7": ConvertUsingUC8(); break;
+                    case "9": WeightMenu(); break;
+                    case "10":
                         running = false;
                         Console.WriteLine("Exiting application...");
                         break;
-
                     default:
                         Console.WriteLine("Invalid choice.");
                         break;
@@ -218,6 +198,114 @@ namespace QuantityMeasurementApp
             QuantityLength result = quantity.ConvertTo(targetUnit);
 
             Console.WriteLine($"Converted Result: {result.Value} {result.Unit}");
+        }
+
+        // ---------------- UC9 ----------------
+        static void WeightMenu()
+        {
+            Console.WriteLine("\n--- UC9 Weight Operations ---");
+            Console.WriteLine("1. Weight Equality");
+            Console.WriteLine("2. Weight Conversion");
+            Console.WriteLine("3. Weight Addition");
+            Console.WriteLine("4. Weight Addition With Target Unit");
+            Console.Write("Select option: ");
+
+            string? choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1": WeightEquality(); break;
+                case "2": WeightConversion(); break;
+                case "3": WeightAddition(); break;
+                case "4": WeightAdditionWithTarget(); break;
+                default: Console.WriteLine("Invalid choice."); break;
+            }
+        }
+
+        static void WeightEquality()
+        {
+            Console.WriteLine("\nSupported Units: KILOGRAM, GRAM, POUND");
+
+            Console.Write("Enter first value: ");
+            double v1 = double.Parse(Console.ReadLine()!);
+            Console.Write("Enter first unit: ");
+            WeightUnit u1 = Enum.Parse<WeightUnit>(Console.ReadLine()!.ToUpper());
+
+            Console.Write("Enter second value: ");
+            double v2 = double.Parse(Console.ReadLine()!);
+            Console.Write("Enter second unit: ");
+            WeightUnit u2 = Enum.Parse<WeightUnit>(Console.ReadLine()!.ToUpper());
+
+            QuantityWeight w1 = new QuantityWeight(v1, u1);
+            QuantityWeight w2 = new QuantityWeight(v2, u2);
+
+            Console.WriteLine(w1.Equals(w2) ? "Equal (true)" : "Not Equal (false)");
+        }
+
+        static void WeightConversion()
+        {
+            Console.WriteLine("\nSupported Units: KILOGRAM, GRAM, POUND");
+
+            Console.Write("Enter value: ");
+            double value = double.Parse(Console.ReadLine()!);
+
+            Console.Write("Enter current unit: ");
+            WeightUnit current = Enum.Parse<WeightUnit>(Console.ReadLine()!.ToUpper());
+
+            Console.Write("Enter target unit: ");
+            WeightUnit target = Enum.Parse<WeightUnit>(Console.ReadLine()!.ToUpper());
+
+            QuantityWeight weight = new QuantityWeight(value, current);
+            QuantityWeight result = weight.ConvertTo(target);
+
+            Console.WriteLine($"Converted Result: {result.Value} {result.Unit}");
+        }
+
+        static void WeightAddition()
+        {
+            Console.WriteLine("\nSupported Units: KILOGRAM, GRAM, POUND");
+
+            Console.Write("Enter first value: ");
+            double v1 = double.Parse(Console.ReadLine()!);
+            Console.Write("Enter first unit: ");
+            WeightUnit u1 = Enum.Parse<WeightUnit>(Console.ReadLine()!.ToUpper());
+
+            Console.Write("Enter second value: ");
+            double v2 = double.Parse(Console.ReadLine()!);
+            Console.Write("Enter second unit: ");
+            WeightUnit u2 = Enum.Parse<WeightUnit>(Console.ReadLine()!.ToUpper());
+
+            QuantityWeight w1 = new QuantityWeight(v1, u1);
+            QuantityWeight w2 = new QuantityWeight(v2, u2);
+
+            QuantityWeight result = w1.Add(w2);
+
+            Console.WriteLine($"Result: {result.Value} {result.Unit}");
+        }
+
+        static void WeightAdditionWithTarget()
+        {
+            Console.WriteLine("\nSupported Units: KILOGRAM, GRAM, POUND");
+
+            Console.Write("Enter first value: ");
+            double v1 = double.Parse(Console.ReadLine()!);
+            Console.Write("Enter first unit: ");
+            WeightUnit u1 = Enum.Parse<WeightUnit>(Console.ReadLine()!.ToUpper());
+
+            Console.Write("Enter second value: ");
+            double v2 = double.Parse(Console.ReadLine()!);
+            Console.Write("Enter second unit: ");
+            WeightUnit u2 = Enum.Parse<WeightUnit>(Console.ReadLine()!.ToUpper());
+
+            Console.Write("Enter TARGET unit: ");
+            WeightUnit target = Enum.Parse<WeightUnit>(Console.ReadLine()!.ToUpper());
+
+            QuantityWeight w1 = new QuantityWeight(v1, u1);
+            QuantityWeight w2 = new QuantityWeight(v2, u2);
+
+            QuantityWeight result = w1.Add(w2, target);
+
+            Console.WriteLine($"Result: {result.Value} {result.Unit}");
         }
     }
 }
