@@ -118,5 +118,34 @@ namespace QuantityMeasurementApp.Models
 
             return new QuantityLength(resultValue, targetUnit);
         }
+        // -------- UC12 Subtraction --------
+public QuantityLength Subtract(QuantityLength other)
+{
+    if (other == null)
+        throw new ArgumentException("Quantity cannot be null");
+
+    double base1 = this.ConvertToFeet();
+    double base2 = other.ConvertToFeet();
+
+    double resultFeet = base1 - base2;
+
+    return new QuantityLength(resultFeet, LengthUnit.FEET);
+}
+
+// -------- UC12 Division --------
+public double Divide(QuantityLength other)
+{
+    if (other == null)
+        throw new ArgumentException("Quantity cannot be null");
+
+    double base1 = this.ConvertToFeet();
+    double base2 = other.ConvertToFeet();
+
+    if (base2 == 0)
+        throw new DivideByZeroException("Cannot divide by zero");
+
+    return base1 / base2;
+}
     }
+
 }
