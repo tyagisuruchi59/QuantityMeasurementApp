@@ -4,9 +4,23 @@ namespace QuantityMeasurementApp.Models
 {
     public interface IMeasurable
     {
-        double GetConversionFactor();              // Relative to base unit
-        double ConvertToBaseUnit(double value);    // Convert to base unit
-        double ConvertFromBaseUnit(double value);  // Convert from base unit
-        string GetUnitName();                      // For display
+        double ConvertToBaseUnit(double value);
+        double ConvertFromBaseUnit(double baseValue);
+
+        // Default: all units support arithmetic
+        bool SupportsArithmetic()
+        {
+            return true;
+        }
+
+        // Default validation
+        void ValidateOperationSupport(string operation)
+        {
+            if (!SupportsArithmetic())
+            {
+                throw new NotSupportedException(
+                    $"Operation '{operation}' is not supported for this measurement type.");
+            }
+        }
     }
 }

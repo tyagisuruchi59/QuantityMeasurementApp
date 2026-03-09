@@ -51,6 +51,9 @@ namespace QuantityMeasurementApp.Models
         {
             ValidateArithmeticOperands(other);
 
+            // UC14: Check if this unit supports arithmetic
+            unit.ValidateOperationSupport(operation.ToString());
+
             double base1 = unit.ConvertToBaseUnit(value);
             double base2 = other.unit.ConvertToBaseUnit(other.value);
 
@@ -63,8 +66,10 @@ namespace QuantityMeasurementApp.Models
                     return base1 - base2;
 
                 case ArithmeticOperation.DIVIDE:
+
                     if (base2 == 0)
                         throw new DivideByZeroException("Cannot divide by zero");
+
                     return base1 / base2;
 
                 default:
@@ -84,6 +89,9 @@ namespace QuantityMeasurementApp.Models
 
         public Quantity<U> Add(Quantity<U> other, U targetUnit)
         {
+            if (targetUnit == null)
+                throw new ArgumentException("Target unit cannot be null");
+
             double baseResult = PerformBaseArithmetic(other, ArithmeticOperation.ADD);
             double converted = targetUnit.ConvertFromBaseUnit(baseResult);
 
@@ -102,6 +110,9 @@ namespace QuantityMeasurementApp.Models
 
         public Quantity<U> Subtract(Quantity<U> other, U targetUnit)
         {
+            if (targetUnit == null)
+                throw new ArgumentException("Target unit cannot be null");
+
             double baseResult = PerformBaseArithmetic(other, ArithmeticOperation.SUBTRACT);
             double converted = targetUnit.ConvertFromBaseUnit(baseResult);
 
@@ -115,6 +126,19 @@ namespace QuantityMeasurementApp.Models
             return PerformBaseArithmetic(other, ArithmeticOperation.DIVIDE);
         }
 
+        // ---------------- CONVERSION ----------------
+
+        public Quantity<U> ConvertTo(U targetUnit)
+        {
+            if (targetUnit == null)
+                throw new ArgumentException("Target unit cannot be null");
+
+            double baseValue = unit.ConvertToBaseUnit(value);
+            double converted = targetUnit.ConvertFromBaseUnit(baseValue);
+
+            return new Quantity<U>(Math.Round(converted, 2), targetUnit);
+        }
+
         // ---------------- EQUALITY ----------------
 
         public override bool Equals(object obj)
@@ -123,6 +147,9 @@ namespace QuantityMeasurementApp.Models
                 return false;
 
             Quantity<U> other = (Quantity<U>)obj;
+
+            if (unit.GetType() != other.unit.GetType())
+                return false;
 
             double base1 = unit.ConvertToBaseUnit(value);
             double base2 = other.unit.ConvertToBaseUnit(other.value);
