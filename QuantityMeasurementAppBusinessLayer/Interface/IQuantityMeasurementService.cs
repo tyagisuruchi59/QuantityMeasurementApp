@@ -1,16 +1,25 @@
-using QuantityMeasurementAppModel;
 using QuantityMeasurementAppModel.DTOs;
+using QuantityMeasurementAppModel.Entities;
+using System.Collections.Generic;
 
 namespace QuantityMeasurementAppBusinessLayer.Interface
 {
     public interface IQuantityMeasurementService
     {
-        QuantityDTO Add(QuantityDTO q1, QuantityDTO q2);
+        QuantityDTO Add(QuantityDTO firstQuantity, QuantityDTO secondQuantity);
 
-        bool Compare(QuantityDTO q1, QuantityDTO q2);
+        bool Compare(QuantityDTO firstQuantity, QuantityDTO secondQuantity);
 
-        QuantityDTO Subtract(QuantityDTO q1, QuantityDTO q2);
+        QuantityDTO Subtract(QuantityDTO firstQuantity, QuantityDTO secondQuantity);
 
-        double Divide(QuantityDTO q1, QuantityDTO q2);
+        double Divide(QuantityDTO firstQuantity, QuantityDTO secondQuantity);
+
+        // UC16 METHODS
+
+        List<QuantityMeasurementEntity> GetAllMeasurements();
+
+        int GetTotalCount();
+
+        void DeleteAllMeasurements();
     }
 }

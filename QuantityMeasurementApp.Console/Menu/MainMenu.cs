@@ -18,13 +18,15 @@ namespace QuantityMeasurementApp.Console.Menu
 
             while (running)
             {
-                System.Console.WriteLine("\n===== Quantity Measurement Menu =====");
-                System.Console.WriteLine("1. Add Quantities");
-                System.Console.WriteLine("2. Compare Quantities");
-                System.Console.WriteLine("3. Subtract Quantities");
-                System.Console.WriteLine("4. Divide Quantities");
-                System.Console.WriteLine("5. Exit");
-                System.Console.Write("Select option: ");
+            System. Console.WriteLine("===== Quantity Measurement Menu =====");
+            System.Console.WriteLine("1. Add Quantities");
+System.Console.WriteLine("2. Compare Quantities");
+System.Console.WriteLine("3. Subtract Quantities");
+System.Console.WriteLine("4. Divide Quantities");
+System.Console.WriteLine("5. Show All Measurements");
+System.Console.WriteLine("6. Show Total Count");
+System.Console.WriteLine("7. Delete All Measurements");
+System.Console.WriteLine("8. Exit");
 
                 string? choice = System.Console.ReadLine();
 
@@ -45,10 +47,20 @@ namespace QuantityMeasurementApp.Console.Menu
                     case "4":
                         controller.Divide();
                         break;
+                  case "5":
+    controller.ShowAllMeasurements();
+    break;
 
-                    case "5":
-                        running = false;
-                        break;
+case "6":
+    controller.ShowTotalCount();
+    break;
+
+case "7":
+    controller.DeleteAll();
+    break;
+
+case "8":
+    return;
 
                     default:
                         System.Console.WriteLine("Invalid option");

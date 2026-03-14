@@ -1,14 +1,37 @@
 ﻿using QuantityMeasurementApp.Console.Controllers;
 using QuantityMeasurementApp.Console.Menu;
+
 using QuantityMeasurementAppBusinessLayer.Interface;
 using QuantityMeasurementAppBusinessLayer.Service;
-using QuantityMeasurementAppRepositoryLayer.Service;
+
 using QuantityMeasurementAppRepositoryLayer.Interface;
+using QuantityMeasurementAppRepositoryLayer.Service;
 
-IQuantityMeasurementRepository repository = new QuantityMeasurementCacheRepository();
-IQuantityMeasurementService service = new QuantityMeasurementServiceImpl(repository);
+using QuantityMeasurementAppRepositoryLayer.Utilities;
 
-QuantitiesController controller = new QuantitiesController(service);
+try
+{
+    // Choose Repository (Database or Cache)
 
-MainMenu menu = new MainMenu(controller);
-menu.Start();
+    // For Database Persistence (UC16)
+    IQuantityMeasurementRepository repository =
+        new QuantityMeasurementDatabaseRepository();
+
+    // Service Layer
+    IQuantityMeasurementService service =
+        new QuantityMeasurementServiceImpl(repository);
+
+    // Controller
+    QuantitiesController controller =
+        new QuantitiesController(service);
+
+    // Menu UI
+    MainMenu menu = new MainMenu(controller);
+
+    menu.Start();
+
+}
+catch (Exception ex)
+{
+    Console.WriteLine("Application Error: " + ex.Message);
+}
