@@ -1,37 +1,45 @@
-﻿using QuantityMeasurementApp.Console.Controllers;
-using QuantityMeasurementApp.Console.Menu;
+﻿using QuantityMeasurementApp.Console.Menu;
 
-using QuantityMeasurementAppBusinessLayer.Interface;
-using QuantityMeasurementAppBusinessLayer.Service;
-
-using QuantityMeasurementAppRepositoryLayer.Interface;
-using QuantityMeasurementAppRepositoryLayer.Service;
-
-using QuantityMeasurementAppRepositoryLayer.Utilities;
-
-try
+namespace QuantityMeasurementApp.Console
 {
-    // Choose Repository (Database or Cache)
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool running = true;
 
-    // For Database Persistence (UC16)
-    IQuantityMeasurementRepository repository =
-        new QuantityMeasurementDatabaseRepository();
+            while (running)
+            {
+                System.Console.WriteLine("\n========================================");
+                System.Console.WriteLine("   QUANTITY MEASUREMENT APPLICATION");
+                System.Console.WriteLine("========================================");
+                System.Console.WriteLine("1. UC1 - UC14 (Basic Operations)");
+                System.Console.WriteLine("2. UC16 (N-Tier with Database/Cache)");
+                System.Console.WriteLine("3. Exit");
+                System.Console.Write("Select an option: ");
 
-    // Service Layer
-    IQuantityMeasurementService service =
-        new QuantityMeasurementServiceImpl(repository);
+                string? choice = System.Console.ReadLine();
 
-    // Controller
-    QuantitiesController controller =
-        new QuantitiesController(service);
+                switch (choice)
+                {
+                    case "1":
+                        QuantityMeasurementApp.Program.RunMenu();
+                        break;
 
-    // Menu UI
-    MainMenu menu = new MainMenu(controller);
+                    case "2":
+                        new MainMenu().Start();
+                        break;
 
-    menu.Start();
+                    case "3":
+                        running = false;
+                        System.Console.WriteLine("Exiting...");
+                        break;
 
-}
-catch (Exception ex)
-{
-    Console.WriteLine("Application Error: " + ex.Message);
+                    default:
+                        System.Console.WriteLine("Invalid choice.");
+                        break;
+                }
+            }
+        }
+    }
 }

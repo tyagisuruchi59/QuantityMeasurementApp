@@ -1,6 +1,6 @@
 using System;
 
-namespace QuantityMeasurementApp.Models
+namespace QuantityMeasurementAppModel.Models
 {
     public class Feet
     {
@@ -13,7 +13,7 @@ namespace QuantityMeasurementApp.Models
             _value = value;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             // Reflexive check
             if (this == obj)

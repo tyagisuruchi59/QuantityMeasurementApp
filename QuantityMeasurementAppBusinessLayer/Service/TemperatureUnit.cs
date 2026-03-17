@@ -1,6 +1,7 @@
 using System;
+using QuantityMeasurementAppBusinessLayer.Interface;
 
-namespace QuantityMeasurementApp.Models
+namespace QuantityMeasurementAppBusinessLayer.Service
 {
     public class TemperatureUnit : IMeasurable
     {

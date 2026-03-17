@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantityMeasurementApp", "Q
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantityMeasurementApp.Tests", "QuantityMeasurementApp.Tests\QuantityMeasurementApp.Tests.csproj", "{212753D1-CE49-498C-808B-467FDD3913F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP", "ASP\ASP.csproj", "{D4A8929C-0885-4C5B-BAC7-20109AC40097}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantityMeasurementAppModel", "QuantityMeasurementAppModel\QuantityMeasurementAppModel.csproj", "{00731159-7B75-4EFC-BA4B-4636CB1BE998}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantityMeasurementAppRepositoryLayer", "QuantityMeasurementAppRepositoryLayer\QuantityMeasurementAppRepositoryLayer.csproj", "{E234508D-C14D-4379-8FB4-5ED425A260C8}"
@@ -51,18 +49,6 @@ Global
 		{212753D1-CE49-498C-808B-467FDD3913F6}.Release|x64.Build.0 = Release|Any CPU
 		{212753D1-CE49-498C-808B-467FDD3913F6}.Release|x86.ActiveCfg = Release|Any CPU
 		{212753D1-CE49-498C-808B-467FDD3913F6}.Release|x86.Build.0 = Release|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Debug|x64.Build.0 = Debug|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Debug|x86.Build.0 = Debug|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Release|x64.ActiveCfg = Release|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Release|x64.Build.0 = Release|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Release|x86.ActiveCfg = Release|Any CPU
-		{D4A8929C-0885-4C5B-BAC7-20109AC40097}.Release|x86.Build.0 = Release|Any CPU
 		{00731159-7B75-4EFC-BA4B-4636CB1BE998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{00731159-7B75-4EFC-BA4B-4636CB1BE998}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00731159-7B75-4EFC-BA4B-4636CB1BE998}.Debug|x64.ActiveCfg = Debug|Any CPU

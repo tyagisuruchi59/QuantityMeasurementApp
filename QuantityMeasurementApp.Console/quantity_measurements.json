@@ -1,0 +1,19 @@
+[
+  {
+    "Operand1": {
+      "Value": 23,
+      "Unit": "CM"
+    },
+    "Operand2": {
+      "Value": 45,
+      "Unit": "CM"
+    },
+    "Operation": "DIVIDE",
+    "Result": {
+      "Value": 0.5111111111111111,
+      "Unit": "CM"
+    },
+    "HasError": false,
+    "ErrorMessage": ""
+  }
+]

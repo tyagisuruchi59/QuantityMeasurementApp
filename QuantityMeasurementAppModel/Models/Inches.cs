@@ -1,6 +1,6 @@
 using System;
 
-namespace QuantityMeasurementApp.Models
+namespace QuantityMeasurementAppModel.Models
 {
     public class Inches
     {
@@ -14,7 +14,7 @@ namespace QuantityMeasurementApp.Models
             this.value = value;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null)
                 return false;

@@ -1,6 +1,6 @@
 using System;
-
-namespace QuantityMeasurementApp.Models
+using QuantityMeasurementAppBusinessLayer.Interface;
+namespace QuantityMeasurementAppBusinessLayer.Service
 {
     public abstract class WeightUnitGeneric : IMeasurable
     {

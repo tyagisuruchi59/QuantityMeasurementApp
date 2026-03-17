@@ -1,6 +1,6 @@
 using System;
 
-namespace QuantityMeasurementApp.Models
+namespace QuantityMeasurementAppBusinessLayer.Interface
 {
     public interface IMeasurable
     {

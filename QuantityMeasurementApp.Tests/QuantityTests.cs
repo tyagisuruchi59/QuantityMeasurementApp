@@ -1,5 +1,6 @@
+using QuantityMeasurementAppBusinessLayer.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using QuantityMeasurementApp.Models;
+using QuantityMeasurementAppModel.Models;
 
 namespace QuantityMeasurementApp.Tests
 {
@@ -148,3 +149,4 @@ public void TestTemperatureArithmeticNotSupported()
 }
         }
     }
+

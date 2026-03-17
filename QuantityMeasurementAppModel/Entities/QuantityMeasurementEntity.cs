@@ -1,17 +1,15 @@
 using QuantityMeasurementAppModel.DTOs;
-using QuantityMeasurementAppModel.Entities;
 
 namespace QuantityMeasurementAppModel.Entities
 {
     public class QuantityMeasurementEntity
     {
         public QuantityDTO? Operand1 { get; set; }
-        public QuantityDTO Operand2 { get; set; }
-        public string Operation { get; set; }
-        public QuantityDTO Result { get; set; }
-
+        public QuantityDTO? Operand2 { get; set; }
+        public string Operation { get; set; } = string.Empty;
+        public QuantityDTO? Result { get; set; }
         public bool HasError { get; set; }
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
 
         public QuantityMeasurementEntity() { }
 

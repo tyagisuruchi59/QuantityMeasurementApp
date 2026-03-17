@@ -13,21 +13,18 @@ namespace QuantityMeasurementAppRepositoryLayer.Service
             using SqlConnection conn = ConnectionFactory.GetConnection();
 
             string query = @"INSERT INTO QuantityMeasurements
-                            (Operand1,Unit1,Operand2,Unit2,Operation,Result)
+                            (Operand1Value, Operand1Unit, Operand2Value, Operand2Unit, Operation, ResultValue)
                             VALUES
-                            (@op1,@u1,@op2,@u2,@operation,@result)";
+                            (@operand1Value, @operand1Unit, @operand2Value, @operand2Unit, @operation, @resultValue)";
 
             SqlCommand cmd = new SqlCommand(query, conn);
 
-            cmd.Parameters.AddWithValue("@op1", entity.Operand1.Value);
-            cmd.Parameters.AddWithValue("@u1", entity.Operand1.Unit);
-
-            cmd.Parameters.AddWithValue("@op2", entity.Operand2.Value);
-            cmd.Parameters.AddWithValue("@u2", entity.Operand2.Unit);
-
-            cmd.Parameters.AddWithValue("@operation", entity.Operation);
-
-            cmd.Parameters.AddWithValue("@result", entity.Result.Value);
+            cmd.Parameters.AddWithValue("@operand1Value", entity.Operand1!.Value);
+            cmd.Parameters.AddWithValue("@operand1Unit",  entity.Operand1!.Unit);
+            cmd.Parameters.AddWithValue("@operand2Value", entity.Operand2!.Value);
+            cmd.Parameters.AddWithValue("@operand2Unit",  entity.Operand2!.Unit);
+            cmd.Parameters.AddWithValue("@operation",     entity.Operation);
+            cmd.Parameters.AddWithValue("@resultValue",   entity.Result!.Value);
 
             cmd.ExecuteNonQuery();
         }
@@ -48,10 +45,10 @@ namespace QuantityMeasurementAppRepositoryLayer.Service
             {
                 QuantityMeasurementEntity entity = new QuantityMeasurementEntity
                 {
-                    Operand1 = new QuantityDTO(reader.GetDouble(1), reader.GetString(2)),
-                    Operand2 = new QuantityDTO(reader.GetDouble(3), reader.GetString(4)),
+                    Operand1  = new QuantityDTO(reader.GetDouble(1), reader.GetString(2)),
+                    Operand2  = new QuantityDTO(reader.GetDouble(3), reader.GetString(4)),
                     Operation = reader.GetString(5),
-                    Result = new QuantityDTO(reader.GetDouble(6), reader.GetString(2))
+                    Result    = new QuantityDTO(reader.GetDouble(6), reader.GetString(4))
                 };
 
                 list.Add(entity);

@@ -1,13 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using QuantityMeasurementApp.Models;
-using QuantityMeasurementApp.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using QuantityMeasurementAppModel.Models;
+using QuantityMeasurementAppBusinessLayer.Service;
 
 namespace QuantityMeasurementApp.Tests
 {
     [TestClass]
     public class FeetTests
     {
-        private QuantityMeasurementService _service;
+        private QuantityMeasurementService? _service;
 
         [TestInitialize]
         public void Setup()
@@ -21,7 +21,7 @@ namespace QuantityMeasurementApp.Tests
             Feet f1 = new Feet(1.0);
             Feet f2 = new Feet(1.0);
 
-            Assert.IsTrue(_service.AreEqual(f1, f2));
+            Assert.IsTrue(_service?.AreEqual(f1, f2));
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace QuantityMeasurementApp.Tests
             Feet f1 = new Feet(1.0);
             Feet f2 = new Feet(2.0);
 
-            Assert.IsFalse(_service.AreEqual(f1, f2));
+            Assert.IsFalse(_service?.AreEqual(f1, f2));
         }
 
         [TestMethod]
@@ -38,7 +38,7 @@ namespace QuantityMeasurementApp.Tests
         {
             Feet f1 = new Feet(1.0);
 
-            Assert.IsFalse(_service.AreEqual(f1, null));
+            Assert.IsFalse(_service?.AreEqual(f1, null!));
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@ namespace QuantityMeasurementApp.Tests
         {
             Feet f1 = new Feet(1.0);
 
-            Assert.IsTrue(_service.AreEqual(f1, f1));
+            Assert.IsTrue(_service?.AreEqual(f1, f1));
         }
 
         [TestMethod]

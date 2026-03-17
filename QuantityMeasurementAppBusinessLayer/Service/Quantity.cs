@@ -1,6 +1,7 @@
 using System;
-
-namespace QuantityMeasurementApp.Models
+using QuantityMeasurementAppBusinessLayer.Interface;
+using QuantityMeasurementAppModel.Models;
+namespace QuantityMeasurementAppBusinessLayer.Service
 {
     public class Quantity<U> where U : IMeasurable
     {
@@ -22,14 +23,6 @@ namespace QuantityMeasurementApp.Models
             this.unit = unit;
         }
 
-        // ---------------- ENUM FOR OPERATIONS ----------------
-
-        private enum ArithmeticOperation
-        {
-            ADD,
-            SUBTRACT,
-            DIVIDE
-        }
 
         // ---------------- VALIDATION HELPER ----------------
 

@@ -1,6 +1,7 @@
 using System;
+using QuantityMeasurementAppModel.Models;
 
-namespace QuantityMeasurementApp.Models
+namespace QuantityMeasurementAppBusinessLayer.Service
 {
     public class QuantityVolume
     {

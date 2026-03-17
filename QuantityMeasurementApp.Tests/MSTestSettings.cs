@@ -1,1 +1,3 @@
-﻿[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
+using QuantityMeasurementAppBusinessLayer.Service;
+[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
+
