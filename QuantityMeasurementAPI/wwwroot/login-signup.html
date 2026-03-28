@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Book Shopping</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            position: relative;
+        }
+
+        /* Left panel - illustration */
+        .left-panel {
+            background: white;
+            border-radius: 16px 0 0 16px;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 280px;
+            height: 460px;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .illustration {
+            width: 160px;
+            height: 160px;
+            margin-bottom: 20px;
+        }
+
+        .brand-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Right panel - form */
+        .right-panel {
+            background: white;
+            border-radius: 0 16px 16px 0;
+            padding: 40px;
+            width: 340px;
+            height: 460px;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            gap: 30px;
+        }
+
+        .tab {
+            font-size: 16px;
+            font-weight: 500;
+            color: #aaa;
+            cursor: pointer;
+            padding-bottom: 8px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #333;
+            font-weight: 700;
+            border-bottom: 2px solid #c0392b;
+        }
+
+        /* Form */
+        .form {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .form.active {
+            display: flex;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s;
+            width: 100%;
+        }
+
+        .form-group input:focus {
+            border-color: #c0392b;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 40px;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        .btn-submit {
+            background: #c0392b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #a93226;
+        }
+
+        .message {
+            font-size: 12px;
+            padding: 8px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Left Panel -->
+    <div class="left-panel">
+        <svg class="illustration" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Blue circle background -->
+            <circle cx="100" cy="100" r="95" fill="#4A90D9" opacity="0.15"/>
+            <circle cx="100" cy="100" r="80" fill="#4A90D9" opacity="0.25"/>
+
+            <!-- Shopping cart -->
+            <g transform="translate(45, 70)">
+                <!-- Cart body -->
+                <path d="M20 20 L90 20 L80 65 L30 65 Z" fill="#4A90D9" stroke="#2c6fad" stroke-width="2"/>
+                <!-- Cart handle -->
+                <path d="M10 10 L20 20" stroke="#2c6fad" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="10" cy="8" r="4" fill="#2c6fad"/>
+                <!-- Cart wheels -->
+                <circle cx="38" cy="72" r="7" fill="#2c6fad"/>
+                <circle cx="72" cy="72" r="7" fill="#2c6fad"/>
+                <!-- Books in cart -->
+                <rect x="30" y="28" width="14" height="28" rx="2" fill="white" opacity="0.9"/>
+                <rect x="48" y="24" width="14" height="32" rx="2" fill="white" opacity="0.7"/>
+                <rect x="66" y="30" width="12" height="26" rx="2" fill="white" opacity="0.8"/>
+            </g>
+
+            <!-- Person sitting -->
+            <g transform="translate(105, 40)">
+                <!-- Head -->
+                <circle cx="25" cy="20" r="16" fill="#F4A261"/>
+                <!-- Hair -->
+                <ellipse cx="25" cy="10" rx="16" ry="8" fill="#6B3A2A"/>
+                <!-- Body -->
+                <ellipse cx="25" cy="50" rx="18" ry="22" fill="#7B68EE"/>
+                <!-- Legs -->
+                <path d="M15 68 Q10 85 5 90" stroke="#F4A261" stroke-width="8" stroke-linecap="round" fill="none"/>
+                <path d="M35 68 Q40 82 50 85" stroke="#F4A261" stroke-width="8" stroke-linecap="round" fill="none"/>
+                <!-- Arm with phone -->
+                <path d="M40 45 Q55 40 58 35" stroke="#F4A261" stroke-width="7" stroke-linecap="round" fill="none"/>
+                <!-- Phone -->
+                <rect x="54" y="28" width="12" height="18" rx="2" fill="#333"/>
+                <rect x="56" y="30" width="8" height="12" rx="1" fill="#4A90D9"/>
+            </g>
+        </svg>
+
+        <div class="brand-name">Online Book Shopping</div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab" id="tab-login" onclick="switchTab('login')">Login</div>
+            <div class="tab active" id="tab-signup" onclick="switchTab('signup')">Signup</div>
+        </div>
+
+        <!-- Message -->
+        <div class="message" id="message"></div>
+
+        <!-- Signup Form -->
+        <form class="form active" id="form-signup" onsubmit="handleSignup(event)">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="signup-name" placeholder="Enter your full name" required/>
+            </div>
+            <div class="form-group">
+                <label>Email Id</label>
+                <input type="email" id="signup-email" placeholder="Enter your email" required/>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="signup-password" placeholder="Enter your password" required/>
+                    <span class="eye-icon" onclick="togglePassword('signup-password')">👁</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="tel" id="signup-mobile" placeholder="Enter mobile number" required/>
+            </div>
+            <button type="submit" class="btn-submit">Signup</button>
+        </form>
+
+        <!-- Login Form -->
+        <form class="form" id="form-login" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Email Id</label>
+                <input type="email" id="login-email" placeholder="Enter your email" required/>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="login-password" placeholder="Enter your password" required/>
+                    <span class="eye-icon" onclick="togglePassword('login-password')">👁</span>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">Login</button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    const API_BASE = 'http://localhost:5167/api/v1';
+
+    function switchTab(tab) {
+        document.getElementById('tab-login').classList.remove('active');
+        document.getElementById('tab-signup').classList.remove('active');
+        document.getElementById('form-login').classList.remove('active');
+        document.getElementById('form-signup').classList.remove('active');
+        document.getElementById('message').className = 'message';
+        document.getElementById('message').textContent = '';
+
+        document.getElementById('tab-' + tab).classList.add('active');
+        document.getElementById('form-' + tab).classList.add('active');
+    }
+
+    function togglePassword(id) {
+        const input = document.getElementById(id);
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function showMessage(text, type) {
+        const msg = document.getElementById('message');
+        msg.textContent = text;
+        msg.className = 'message ' + type;
+    }
+
+    async function handleSignup(e) {
+        e.preventDefault();
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+
+        try {
+            const response = await fetch(`${API_BASE}/auth/signup`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: name,
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showMessage('Registration successful! Please login.', 'success');
+                setTimeout(() => switchTab('login'), 1500);
+            } else {
+                showMessage(data.message || 'Registration failed', 'error');
+            }
+        } catch (err) {
+            showMessage('Server error. Please try again.', 'error');
+        }
+    }
+
+    async function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+
+        try {
+            const response = await fetch(`${API_BASE}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('accessToken', data.data.accessToken);
+                localStorage.setItem('refreshToken', data.data.refreshToken);
+                showMessage('Login successful! Welcome ' + data.data.username, 'success');
+            } else {
+                showMessage(data.message || 'Invalid credentials', 'error');
+            }
+        } catch (err) {
+            showMessage('Server error. Please try again.', 'error');
+        }
+    }
+</script>
+
+</body>
+</html>
