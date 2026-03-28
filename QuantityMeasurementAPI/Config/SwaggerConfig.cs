@@ -15,7 +15,7 @@ namespace QuantityMeasurementAPI.Config
                     Description = "REST API for UC17 - Quantity Measurement Application"
                 });
 
-                // ── JWT Bearer - correct configuration ────────────────────────
+                // ── JWT Bearer - correct configuration
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
