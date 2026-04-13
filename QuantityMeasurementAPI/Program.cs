@@ -115,8 +115,8 @@ try
         }
     }
 
-    // ─── Middleware Pipeline ──────────────────────────────────────────────────
-    if (app.Environment.IsDevelopment())
+    var swaggerEnabled = builder.Configuration.GetValue<bool>("Swagger:Enabled", true);
+    if (app.Environment.IsDevelopment() || swaggerEnabled)
     {
         app.UseSwagger();
         app.UseSwaggerUI(c =>
