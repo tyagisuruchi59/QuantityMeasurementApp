@@ -8,7 +8,6 @@ namespace QuantityMeasurementAPI.Controllers
 {
     [ApiController]
     [Route("api/v1/quantities")]
-    [Authorize]
     [Produces("application/json")]
     [SwaggerTag("Quantity Measurements - REST API for quantity measurement operations")]
     public class QuantityMeasurementController : ControllerBase
@@ -27,13 +26,13 @@ namespace QuantityMeasurementAPI.Controllers
         // ─── POST /compare ────────────────────────────────────────────────────
 
         [HttpPost("compare")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Compare two quantities", OperationId = "CompareQuantities")]
         [SwaggerResponse(200, "Comparison result", typeof(QuantityMeasurementDTO))]
         [SwaggerResponse(400, "Invalid input")]
-        [SwaggerResponse(401, "Unauthorized")]
         public async Task<IActionResult> CompareQuantities([FromBody] QuantityInputDTO input)
         {
-            _logger.LogInformation("POST /compare called by {User}", User.Identity?.Name);
+            _logger.LogInformation("POST /compare called by {User}", User.Identity?.Name ?? "Guest");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -49,12 +48,13 @@ namespace QuantityMeasurementAPI.Controllers
         // ─── POST /convert ────────────────────────────────────────────────────
 
         [HttpPost("convert")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Convert a quantity to a different unit", OperationId = "ConvertQuantity")]
         [SwaggerResponse(200, "Conversion result", typeof(QuantityMeasurementDTO))]
         [SwaggerResponse(400, "Invalid input or incompatible units")]
         public async Task<IActionResult> ConvertQuantity([FromBody] QuantityInputDTO input)
         {
-            _logger.LogInformation("POST /convert called");
+            _logger.LogInformation("POST /convert called by {User}", User.Identity?.Name ?? "Guest");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -70,12 +70,13 @@ namespace QuantityMeasurementAPI.Controllers
         // ─── POST /add ────────────────────────────────────────────────────────
 
         [HttpPost("add")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Add two quantities", OperationId = "AddQuantities")]
         [SwaggerResponse(200, "Sum result", typeof(QuantityMeasurementDTO))]
         [SwaggerResponse(400, "Invalid input or incompatible categories")]
         public async Task<IActionResult> AddQuantities([FromBody] QuantityInputDTO input)
         {
-            _logger.LogInformation("POST /add called");
+            _logger.LogInformation("POST /add called by {User}", User.Identity?.Name ?? "Guest");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -91,12 +92,13 @@ namespace QuantityMeasurementAPI.Controllers
         // ─── POST /subtract ───────────────────────────────────────────────────
 
         [HttpPost("subtract")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Subtract two quantities", OperationId = "SubtractQuantities")]
         [SwaggerResponse(200, "Difference result", typeof(QuantityMeasurementDTO))]
         [SwaggerResponse(400, "Invalid input")]
         public async Task<IActionResult> SubtractQuantities([FromBody] QuantityInputDTO input)
         {
-            _logger.LogInformation("POST /subtract called");
+            _logger.LogInformation("POST /subtract called by {User}", User.Identity?.Name ?? "Guest");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -112,12 +114,13 @@ namespace QuantityMeasurementAPI.Controllers
         // ─── POST /divide ─────────────────────────────────────────────────────
 
         [HttpPost("divide")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Divide two quantities", OperationId = "DivideQuantities")]
         [SwaggerResponse(200, "Division result", typeof(QuantityMeasurementDTO))]
         [SwaggerResponse(400, "Division by zero or incompatible categories")]
         public async Task<IActionResult> DivideQuantities([FromBody] QuantityInputDTO input)
         {
-            _logger.LogInformation("POST /divide called");
+            _logger.LogInformation("POST /divide called by {User}", User.Identity?.Name ?? "Guest");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -133,8 +136,10 @@ namespace QuantityMeasurementAPI.Controllers
         // ─── GET /history/operation/{operation} ───────────────────────────────
 
         [HttpGet("history/operation/{operation}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Get measurement history by operation", OperationId = "GetOperationHistory")]
         [SwaggerResponse(200, "List of measurements", typeof(List<QuantityMeasurementDTO>))]
+        [SwaggerResponse(401, "Unauthorized")]
         public async Task<IActionResult> GetOperationHistory([FromRoute] string operation)
         {
             _logger.LogInformation("GET /history/operation/{Operation}", operation);
@@ -145,8 +150,10 @@ namespace QuantityMeasurementAPI.Controllers
         // ─── GET /history/type/{measurementType} ──────────────────────────────
 
         [HttpGet("history/type/{measurementType}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Get measurement history by type", OperationId = "GetTypeHistory")]
         [SwaggerResponse(200, "List of measurements", typeof(List<QuantityMeasurementDTO>))]
+        [SwaggerResponse(401, "Unauthorized")]
         public async Task<IActionResult> GetTypeHistory([FromRoute] string measurementType)
         {
             _logger.LogInformation("GET /history/type/{Type}", measurementType);
@@ -171,6 +178,7 @@ namespace QuantityMeasurementAPI.Controllers
         // ─── GET /count/{operation} ───────────────────────────────────────────
 
         [HttpGet("count/{operation}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Get operation count", OperationId = "GetOperationCount")]
         [SwaggerResponse(200, "Count of operations")]
         public async Task<IActionResult> GetOperationCount([FromRoute] string operation)

@@ -37,6 +37,12 @@ namespace QuantityMeasurementAppModel.DTOs
         public string Email        { get; set; } = string.Empty;
         public string Role         { get; set; } = string.Empty;
         public string Message      { get; set; } = string.Empty;
+
+        public class GoogleAuthDTO
+{
+    [Required(ErrorMessage = "Google token is required")]
+    public string Token { get; set; } = string.Empty;
+}
     }
 
     public class RefreshTokenDTO
@@ -62,4 +68,9 @@ namespace QuantityMeasurementAppModel.DTOs
         public static ApiResponseDTO<T> Fail(string message, List<string>? errors = null)
             => new() { Success = false, Message = message, Errors = errors ?? new() };
     }
+    public class GoogleAuthDTO
+{
+    [Required(ErrorMessage = "Google token is required")]
+    public string Token { get; set; } = string.Empty;
+}
 }

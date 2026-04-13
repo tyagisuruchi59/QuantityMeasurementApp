@@ -1,3 +1,4 @@
+using Google.Apis.Auth;
 using Microsoft.Extensions.Logging;
 using QuantityMeasurementAppBusinessLayer.Interface;
 using QuantityMeasurementAppModel.DTOs;
@@ -8,20 +9,14 @@ using QuantityMeasurementAppRepositoryLayer.Utilities;
 namespace QuantityMeasurementAppBusinessLayer.Service
 {
     /// <summary>
-    /// Authentication service - sign-up, login, token refresh, logout.
-    ///
-    /// Security flow:
-    /// 1. Sign-up : generate salt → hash password (PBKDF2) → store user
-    /// 2. Login   : find user → verify password (constant-time) → issue JWT + refresh token
-    /// 3. Refresh : validate refresh token → rotate → issue new JWT
-    /// 4. Logout  : blacklist JWT jti in Redis → clear refresh token in DB
+    /// Authentication service - sign-up, login, token refresh, logout, google login.
     /// </summary>
     public class AuthService : IAuthService
     {
-        private readonly IUserRepository    _userRepo;
-        private readonly PasswordService    _passwordService;
-        private readonly JwtTokenService    _jwtService;
-        private readonly RedisService       _redis;
+        private readonly IUserRepository      _userRepo;
+        private readonly PasswordService      _passwordService;
+        private readonly JwtTokenService      _jwtService;
+        private readonly RedisService         _redis;
         private readonly ILogger<AuthService> _logger;
 
         public AuthService(
@@ -61,7 +56,7 @@ namespace QuantityMeasurementAppBusinessLayer.Service
                 Email        = dto.Email.ToLower(),
                 PasswordHash = passwordHash,
                 Salt         = salt,
-                Role = "User",
+                Role         = "User",
                 IsActive     = true,
                 CreatedAt    = DateTime.UtcNow
             };
@@ -80,8 +75,6 @@ namespace QuantityMeasurementAppBusinessLayer.Service
 
             var user = await _userRepo.FindByEmailAsync(dto.Email);
 
-            // Always run verification even if user not found
-            // (prevents user enumeration via timing attacks)
             var passwordValid = user != null &&
                 _passwordService.VerifyPassword(dto.Password, user.PasswordHash, user.Salt);
 
@@ -102,6 +95,58 @@ namespace QuantityMeasurementAppBusinessLayer.Service
 
             _logger.LogInformation("Login successful for: {Email}", dto.Email);
             return await IssueTokens(user, "Login successful");
+        }
+
+        // ─── Google Login ─────────────────────────────────────────────────────
+
+        public async Task<AuthResponseDTO> GoogleLoginAsync(GoogleAuthDTO dto)
+        {
+            _logger.LogInformation("Google login attempt");
+
+            // Validate the Google token
+            GoogleJsonWebSignature.Payload payload;
+            try
+            {
+                payload = await GoogleJsonWebSignature.ValidateAsync(dto.Token);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning("Google token validation failed: {Message}", ex.Message);
+                throw new UnauthorizedAccessException("Invalid Google token");
+            }
+
+            // Check if user already exists
+            var user = await _userRepo.FindByEmailAsync(payload.Email);
+
+            if (user == null)
+            {
+                // Auto-register the Google user
+                var salt     = _passwordService.GenerateSalt();
+                var randomPw = _passwordService.HashPassword(Guid.NewGuid().ToString(), salt);
+
+                user = new UserEntity
+                {
+                    Username     = payload.Name ?? payload.Email.Split('@')[0],
+                    Email        = payload.Email.ToLower(),
+                    PasswordHash = randomPw,
+                    Salt         = salt,
+                    Role         = "User",
+                    IsActive     = true,
+                    CreatedAt    = DateTime.UtcNow
+                };
+
+                user = await _userRepo.SaveAsync(user);
+                _logger.LogInformation("New Google user registered: {Email}", user.Email);
+            }
+            else
+            {
+                _logger.LogInformation("Existing Google user logged in: {Email}", user.Email);
+            }
+
+            user.LastLogin = DateTime.UtcNow;
+            await _userRepo.UpdateAsync(user);
+
+            return await IssueTokens(user, "Google login successful");
         }
 
         // ─── Refresh Token ────────────────────────────────────────────────────
@@ -141,10 +186,8 @@ namespace QuantityMeasurementAppBusinessLayer.Service
         {
             _logger.LogInformation("Logout with jti: {Jti}", jti);
 
-            // 1. Blacklist the JWT token ID in Redis
             await _redis.BlacklistTokenAsync(jti);
 
-            // 2. Clear refresh token from database
             var users = await _userRepo.FindAllAsync();
             var user  = users.FirstOrDefault(u => u.RefreshToken == refreshToken);
 
@@ -161,8 +204,8 @@ namespace QuantityMeasurementAppBusinessLayer.Service
 
         private async Task<AuthResponseDTO> IssueTokens(UserEntity user, string message)
         {
-            var accessToken                    = _jwtService.GenerateAccessToken(user);
-            var (refreshToken, refreshExpiry)  = _jwtService.GenerateRefreshToken();
+            var accessToken                   = _jwtService.GenerateAccessToken(user);
+            var (refreshToken, refreshExpiry) = _jwtService.GenerateRefreshToken();
 
             user.RefreshToken       = refreshToken;
             user.RefreshTokenExpiry = refreshExpiry;

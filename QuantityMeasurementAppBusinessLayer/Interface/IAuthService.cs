@@ -4,7 +4,7 @@ namespace QuantityMeasurementAppBusinessLayer.Interface
 {
     /// <summary>
     /// Service interface for authentication and authorization.
-    /// Handles sign-up, login, token refresh, and logout.
+    /// Handles sign-up, login, token refresh, logout and google login.
     /// </summary>
     public interface IAuthService
     {
@@ -12,5 +12,6 @@ namespace QuantityMeasurementAppBusinessLayer.Interface
         Task<AuthResponseDTO> LoginAsync(LoginDTO loginDto);
         Task<AuthResponseDTO> RefreshTokenAsync(RefreshTokenDTO refreshDto);
         Task LogoutAsync(string jti, string refreshToken);
+        Task<AuthResponseDTO> GoogleLoginAsync(GoogleAuthDTO dto);
     }
 }

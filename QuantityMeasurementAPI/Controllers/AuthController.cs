@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using QuantityMeasurementAPI.Config;
 using QuantityMeasurementAppBusinessLayer.Interface;
 using QuantityMeasurementAppModel.DTOs;
 
@@ -76,6 +77,27 @@ namespace QuantityMeasurementAPI.Controllers
             catch (UnauthorizedAccessException ex)
             {
                 _logger.LogWarning("Login failed: {Message}", ex.Message);
+                return Unauthorized(ApiResponseDTO<object>.Fail(ex.Message));
+            }
+        }
+
+        [HttpPost("google")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Login or register with Google", OperationId = "GoogleLogin")]
+        [SwaggerResponse(200, "Google login successful")]
+        [SwaggerResponse(401, "Invalid Google token")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleAuthDTO dto)
+        {
+            _logger.LogInformation("POST /auth/google");
+
+            try
+            {
+                var result = await _authService.GoogleLoginAsync(dto);
+                return Ok(ApiResponseDTO<AuthResponseDTO>.Ok(result, result.Message));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogWarning("Google login failed: {Message}", ex.Message);
                 return Unauthorized(ApiResponseDTO<object>.Fail(ex.Message));
             }
         }

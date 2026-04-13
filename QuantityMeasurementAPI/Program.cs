@@ -42,8 +42,8 @@ try
     else
     {
         builder.Services.AddDbContext<QuantityDbContext>(opt =>
-            opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-        logger.Info("Using SQL Server database");
+            opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        logger.Info("Using PostgreSQL database");
     }
 
     // ─── Redis Distributed Cache ──────────────────────────────────────────────
