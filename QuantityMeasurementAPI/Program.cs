@@ -115,8 +115,7 @@ try
         }
     }
 
-    var swaggerEnabled = builder.Configuration.GetValue<bool>("Swagger:Enabled", true);
-    if (app.Environment.IsDevelopment() || swaggerEnabled)
+     if (true)
     {
         app.UseSwagger();
         app.UseSwaggerUI(c =>
