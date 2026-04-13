@@ -105,7 +105,7 @@ namespace QuantityMeasurementAPI.Config
 
                 options.AddPolicy("ProductionCors", policy =>
                     policy
-                        .WithOrigins("https://yourdomain.com")
+                        .WithOrigins("https://quantity-measurement-app-frontend-bznatuwtj.vercel.app")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
